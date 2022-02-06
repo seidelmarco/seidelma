@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Kleinanzeigen - Eingabeformular{% endblock %}
+
+{% block content %}
+
+<div class="m-5">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <a href="{% url 'smallads:all' %}" class="btn btn-dark my-3">Go Back</a>
+                <div class="card">
+                    <div class="card-header">Kleinanzeige anlegen oder ändern</div>
+
+                      <form action="" method="post" id="upload_form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group m-3">
+                            <label>Titel</label>
+                            <input required name="title" type="text" placeholder="Gib einen Titel ein"
+                                class="form-control">
+                        </div>
+
+                        <div class="form-group m-3">
+                            <label>Preis</label>
+                            <input required name="price" type="text" placeholder="Preis in Euro"
+                                class="form-control">
+                        </div>
+
+                        <div class="form-group m-3">
+                            <label>Beschreibung</label>
+                            <input required name="description" type="text" placeholder="Sag etwas Besonderes über dein Produkt..."
+                                class="form-control">
+                        </div>
+
+                        <div class="form-group m-3">
+                            <label>Select a category</label>
+                            <select name="category" class="form-control">
+                                <option value='none'>Select a category...</option>
+
+                                {% for category in categories %}
+                                <option value='{{category.id}}'>{{category.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="form-group m-3">
+                            <label>Kategorie anlegen</label>
+                            <input name="category_new" type="text" placeholder="Neue Kategorie oder frei lassen bei obiger Auswahl..."
+                                class="form-control">
+                        </div>
+
+                        <div class="form-group m-3">
+                            <label>Tags</label>
+                            <input name="tags" type="text" placeholder="durch Kommas getrennte Schlagwortliste, mehrere Worte in Anführungen..."
+                                class="form-control">
+                        </div>
+
+                        <div class="form-group m-3">
+                            <label>Foto hochladen</label>
+                            <input required name="image" type="file" class="form-control-file">
+                        </div>
+
+                        <button type='submit' class="btn btn-primary my-3">Submit</button>
+                        <button class="btn btn-primary my-3" type="submit" value="Cancel" onclick="window.location.href='{% url 'smallads:all' %}';return false;">Cancel</button>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- https://stackoverflow.com/questions/2472422/django-file-upload-size-limit -->
+<script>
+$("#upload_form").submit(function() {
+    console.log('Checking file size');
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var file = $('#id_{{ form.upload_field_name }}')[0].files[0];
+        if file && file.size > {{ form.max_upload_limit }} ) {
+            alert("File " + file.name + " of type " + file.type + " must be < {{ form.max_upload_limit_text }}");
+        return false;
+        }
+    }
+});
+</script>
+{% endblock %}

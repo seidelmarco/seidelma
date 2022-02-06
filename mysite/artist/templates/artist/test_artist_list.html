@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Test Artist Main List{% endblock %}
+
+{% block head %}
+<style>
+    .image-thumbnail {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="herotitle">Gallery - Our Artists</h1>
+
+    <div class="m-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card my-2">
+              <div class="card-header">
+                Categories
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <a href="{% url 'artist:all' %}">All</a>
+                </li>
+                {% for category in categories %}
+                    <li class="{% url 'artist:all' %}?artist={{ artist.name }}">{{ category.name }}</li>
+                {% empty %}
+                    <p>No categories yet...</p>
+                {% endfor %}
+                <a href="#" class="btn btn-dark btn-block btn-sm m-1">Add Artist</a>
+                <a href="#" class="btn btn-dark btn-block btn-sm m-1">xyz</a>
+              </ul>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row">
+                {% for artist in artist_list %}
+                <div class="col-md-4">
+                <div class="card my-2">
+                    <img class="image-thumbnail" src="{{ artist.profpic.url }}" class="card-img-top" alt="{{ artist.altattr }}">
+                        <div class="card-body">
+                            <small>{{ artist.name }}</small>
+                        </div>
+                        <a href="{% url 'artist:test_artist_detail' artist.id %}" class="btn btn-outline-dark btn-sm m-1">View Artist...</a>
+
+                </div>
+                </div>
+                {% empty %}
+                    <p>No Artists in the Database</p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="col-md-1"></div>
+
+    </div>
+    </div>
+
+
+</div>
+{% endblock %}

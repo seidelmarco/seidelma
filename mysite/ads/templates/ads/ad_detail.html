@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Classifieds - {{ ad.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+{% if ad.content_type %}
+<div id="overlay" class="overlay" style="text-align: center;"
+   onclick="document.getElementById('overlay').style.display = 'none';">
+    <img style="width:50%;margin-top: 50px; border:3px solid black;" src="{% url 'ads:ad_picture' ad.id %}">
+</div>
+{% endif %}
+
+<span style="float: right;">
+({{ ad.updated_at|naturaltime }})
+{% if ad.owner == user %}
+<a href="{% url 'ads:ad_update' ad.id %}"><i class="fa fa-pencil"></i></a>
+<a href="{% url 'ads:ad_delete' ad.id %}"><i class="fa fa-trash"></i></a>
+{% endif %}
+</span>
+<h1>{{ ad.title }}</h1>
+
+{% if ad.content_type %}
+<img style="float:right; max-width:25%;" src="{% url 'ads:ad_picture' ad.id %}"
+    onclick="document.getElementById('overlay').style.display = 'block';">
+{% endif %}
+
+<ul>
+    <li>{{ ad.text }}</li>
+    <li>{{ ad.price }} Euro</li>
+</ul>
+
+<!-- tags hier einbauen -->
+{% if ad.tags.all %}
+{% for tag in ad.tags.all %}
+    <!--Minimalvariante - eigentlich sollten die klickbar sein und irgendwas machen - aber was???? ;-)
+    zu erst einmal in die Suche einbauen-->
+    <span style="border:1px grey solid; background-color: Teal;">{{ tag }}</span>
+{% endfor %}
+{% endif %}
+
+{% if user.is_authenticated %}
+<br clear="all"/>
+<p>
+{% load crispy_forms_tags %}
+<form method="post" action="{% url 'ads:ad_comment_create' ad.id %}">
+    {% csrf_token %}
+    {{ comment_form|crispy }}
+<input type="submit" value="Submit">
+<input type="submit" value="Cancel" onclick="window.location.href='{% url 'ads:all' %}';return false;">
+</form>
+</p>
+{% endif %}
+
+{% for comment in comments %}
+<p>{{ comment.owner }}: {{ comment.text }}
+({{ comment.updated_at|naturaltime }})
+{% if user == comment.owner %}
+<a href="{% url 'ads:comment_delete' comment.id %}"><i class="fa fa-trash"></i></a>
+{% endif %}
+</p>
+{% endfor %}
+
+<p>
+</p>
+<p>
+<a href="{% url 'ads:all' %}">All Classifieds</a>
+</p>
+</div>
+{% endblock %}

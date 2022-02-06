@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <title>Dataproject - Keydata Tabelle ausgewählter Entries</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div>
+        {% if latest_keydata_list %}
+            <ul>
+                {% for foo in latest_keydata_list %}
+                <li><a href="/dataproject/{{ foo.id }}">{{ foo.name}}</a></li>
+                {% endfor %}
+            </ul>
+            </br>
+            <div>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Ticker</th>
+                        <th>Währung</th>
+                        <th>Kurs</th>
+                        <th>Änderung</th>
+                        <th>Delta %</th>
+                        <th>KGV</th>
+                        <th>Dividend</th>
+                        <th>EPS</th>
+                        <th>Div.rendite</th>
+                        <th>Shortquote</th>
+                        <th>52W-Tief</th>
+                        <th>52W-Hoch</th>
+                        <th>Url</th>
+                    </tr>
+                    {% for row in latest_keydata_list %}
+                    <tr>
+                        <td>{{ row.name}}</td>
+                        <td>{{ row.ticker}}</td>
+                        <td>{{ row.currency_symbol}}</td>
+                        <td>{{ row.price}}</td>
+                        <td>{{ row.change}}</td>
+                        <td>{{ row.changepercent}}</td>
+                        <td>{{ row.peratio}}</td>
+                        <td>{{ row.dividend}}</td>
+                        <td>{{ row.eps}}</td>
+                        <td>{{ row.divyield}}</td>
+                        <td>{{ row.shortrate}}</td>
+                        <td>{{ row.lower_52}}</td>
+                        <td>{{ row.upper_52}}</td>
+                        <td>{{ row.url}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% else %}
+            <p>Keine Liste vorhanden.</p>
+        {% endif %}
+    </div>
+
+</body>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Kleinanzeigen - {{ smallad.title }}{% endblock %}
+
+{% block head %}
+<style>
+
+    .image-thumbnail {
+            height: 400px;
+            object-fit: cover;
+    }
+
+    .list-group-item a {
+            text-decoration: none;
+            color: black;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="m-5">
+    <div class="container-fluid">
+
+
+<div class="row justify-content-center">
+
+<div class="col-md-8">
+    <div class="row justify-content-center">
+        <div class="card" style="width: 45rem;">
+        <div class="card-header">
+            <a href="{% url 'smallads:all' %}" class="btn btn-dark my-3">Go Back</a>
+            <span style="float: right;">
+                ({{ smallad.updated_at|naturaltime }})
+                {% if smallad.owner == user %}
+                <a href="{% url 'smallads:smallad_update' smallad.id %}"><i class="fa fa-pencil"></i></a>
+                <a href="{% url 'smallads:smallad_delete' smallad.id %}"><i class="fa fa-trash"></i></a>
+                {% endif %}
+            </span>
+        </div>
+          <img class="image-thumbnail" src="{{smallad.image.url}}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{ smallad.title }}</h5>
+            <p class="card-text">{{ smallad.description }}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Preis: {{ smallad.price }} Euro</li>
+            <li class="list-group-item">Tags:
+            <!-- tags hier einbauen -->
+                {% if smallad.tags.all %}
+                {% for tag in smallad.tags.all %}
+                    <!--Minimalvariante - eigentlich sollten die klickbar sein und irgendwas machen - aber was???? ;-)
+                    zu erst einmal in die Suche einbauen-->
+                    <span style="border:1px grey solid; background-color: Teal;">{{ tag }}</span>
+                {% endfor %}
+                {% endif %}
+            </li>
+
+           <!--hier die kleinen Sterne einbauen -->
+            <!--2. Schritt: für alle user mit Klickfunktion - aber nur auf Detailseite-->
+
+            {% if user.is_authenticated %}
+            <li class="list-group-item">Mein Favorit:</li>
+            <li class="list-group-item">
+
+                                    <!-- Two hrefs with two stacked icons each - one showing and one hidden -->
+                                    <a href="#" onclick=
+                                        "favAd('{% url 'smallads:smallad_unfavorite' smallad.id %}', {{ smallad.id }} ); return false;"
+                                        {% if smallad.id not in favorites %} style="display: none;" {% endif %}
+                                        id="favorite_star_{{ smallad.id }}">
+                                    <span class="fa-stack" style="vertical-align: middle;">
+                                    <i class="fa fa-star fa-stack-1x" style="color: orange;"></i>
+                                    <i class="fa fa-star-o fa-stack-1x"></i>
+                                    </span>
+                                    </a>
+                                    <!-- the second href -->
+                                    <!-- Weird - fa-stack changes vertical spacing so to be consistent we use it here -->
+                                    <a href="#" onclick=
+                                        "favAd('{% url 'smallads:smallad_favorite' smallad.id %}', {{ smallad.id }} ); return false;"
+                                        {% if smallad.id in favorites %} style="display: none;" {% endif %}
+                                        id="unfavorite_star_{{ smallad.id }}">
+                                    <span class="fa-stack" style="vertical-align: middle;">
+                                    <i class="fa fa-star fa-stack-1x" style="display: none; color: orange;"></i>
+                                    <i class="fa fa-star-o fa-stack-1x"></i>
+                                    </span>
+                                    </a>
+            </li>
+            {% endif %}
+            <li class="list-group-item">Kommentare:
+
+                {% if user.is_authenticated %}
+                <br clear="all"/>
+                <p>
+                {% load crispy_forms_tags %}
+                    <form method="post" action="{% url 'smallads:smallad_comment_create' smallad.id %}">
+                        {% csrf_token %}
+                        {{ comment_form|crispy }}
+                    <input type="submit" value="Submit">
+                    <input type="submit" value="Cancel" onclick="window.location.href='{% url 'smallads:all' %}';return false;">
+                    </form>
+                </p>
+                {% endif %}
+
+                {% for comment in comments %}
+                <p>{{ comment.owner }}: {{ comment.text }}
+                ({{ comment.updated_at|naturaltime }})
+                {% if user == comment.owner %}
+                    <a href="{% url 'smallads:smallad_comment_delete' comment.id %}"><i class="fa fa-trash"></i></a>
+                {% endif %}
+                </p>
+                {% endfor %}
+
+            </li>
+          </ul>
+          <div class="card-body">
+            <a href="#" class="card-link">Auf meine Wunschliste</a>
+            <a href="{% url 'smallads:all' %}" class="card-link">Alle Kleinanzeigen</a>
+          </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function favAd(url, smallad_id) {
+        console.log('Requesting JSON');
+        $.post(url, {},  function(rowz){
+            console.log(url, 'finished');
+            $("#unfavorite_star_"+smallad_id).toggle();
+            $("#favorite_star_"+smallad_id).toggle();
+        }).fail(function(xhr) {
+            alert('Url failed with '+xhr.status+' '+url);
+        });
+    }
+</script>
+
+{% endblock %}

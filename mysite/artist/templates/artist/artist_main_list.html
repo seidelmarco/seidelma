@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Gallery of our Artists - {{ title }}{% endblock %}
+
+
+{% block head %}
+<style>
+    .image-thumbnail {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="herotitle">Gallery - our Artists</h1>
+
+    <div class="m-5">
+    <div class="row">
+        <div class="col-md-3">
+
+            <div class="card my-2">
+                <div class="card-header">
+                    Categories
+                </div>
+                  <ul  class="list-group list-group-flush">
+                    <li class="list-group-item"><a href="{% url 'artist:all' %}">All</a></li>
+                    {% for artist in artists %}
+                        <li class="list-group-item">
+                            <a href="{% url 'artist:all' %}?artist={{ artist.name }}">{{ artist.name }}</a>
+                        </li>
+                    {% endfor %}
+
+                    <li class="list-group-item">
+                        <a href="{% url 'artist:add' %}" class="btn btn-dark btn-block btn-sm m-1">Add Artist</a>
+                    </li>
+                  </ul>
+            </div>
+
+        </div>
+
+        <div class="col-md-9">
+            <div class="row">
+                {% for photo in photos %}
+                <div class="col-md-4">
+                <div class="card my-2">
+                    <img class="image-thumbnail" src="{{ photo.image.url }}" class="card-img-top" alt="{{ photo.altattr }}">
+                        <div class="card-body">
+                            <small>{{ photo.artist.name }}</small>
+                        </div>
+                        <a href="{% url 'artist:photo' photo.id %}" class="btn btn-outline-dark btn-sm m-1">View Photo...</a>
+
+                </div>
+                </div>
+                {% empty %}
+                    <p>No Photos in the Database</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+{% endblock %}

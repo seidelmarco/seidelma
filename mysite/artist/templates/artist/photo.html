@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Photos of Artists - {{ title }}{% endblock %}
+
+
+{% block head %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="herotitle">Photos</h1>
+
+    <div class="m-5"></div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <a href="{% url 'artist:all' %}" class="btn btn-dark my-3">Go Back</a>
+            <div style="height: 90vh;">
+                <img style="max-width: 100%; max-height: 100%;" src="{{ photos.image.url }}" alt="{{ altattr }}">
+                <p>{{ photos.description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <title>Polls - Detail Template</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div>
+
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend><h1>{{ question.question_text }}</h1></legend>
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% for choice in question.choice_set.all %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label></br>
+                <!--<label for="42">42</label></br>-->
+            {% endfor %}
+        </fieldset><br>
+        <input type="submit" value="Vote">
+        </form>
+
+
+
+            <!--Method-calling happens in the % for % loop:
+            question.choice_set.all is interpreted as the Python code
+            question.choice_set.all(), which returns an iterable of
+            Choice objects and is suitable for use in the % for % tag. die
+            geschwungenen Klammern habe ich weggelassen, weil sie von html
+            nicht auskommentiert werden Lol ;-)-->
+
+    </div>
+
+</body>
+{% endblock %}

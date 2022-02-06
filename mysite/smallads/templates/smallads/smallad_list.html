@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Gallery of classifieds{% endblock %}
+
+{% block head %}
+<!-- das brauchen wir eigentlich nicht, weil ich doch keine w3 school Klassen in base.html verwende-->
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+    form.ad_list_search_form input[type=text] {
+      padding: 10px;
+      font-size: 17px;
+      border: 1px solid teal;
+      float: left;
+      width: 80%;
+      background: #f1f1f1;
+    }
+
+    form.ad_list_search_form button {
+      float: left;
+      width: 20%;
+      padding: 10px;
+      background: #2196F3;
+      color: white;
+      font-size: 17px;
+      border: 1px solid teal;
+      border-left: none;
+      cursor: pointer;
+    }
+
+    form.ad_list_search_form button:hover {
+      background: #0b7dda;
+    }
+
+    form.ad_list_search_form::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    .image-thumbnail {
+            height: 200px;
+            object-fit: cover;
+    }
+
+    .list-group-item a {
+            text-decoration: none;
+            color: black;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="herotitle">Kleinanzeigen</h1>
+
+    <div class="m-5">
+    <!--
+        <div style="float:right">
+        <!-- https://www.w3schools.com/howto/howto_css_search_button.asp-->
+    <!--    <form class="ad_list_search_form">
+            <input type="text" placeholder="Search.." name="search" pattern=".{3,}"  required title="3 characters minimum"
+            {% if search %} value="{{ search }}" {% endif %}>
+            <button type="submit"><i class="fa fa-search"></i></button>
+            <a href="{% url 'ads:all' %}"><i class="fa fa-undo"></i></a>
+        </form>
+        </div>
+    -->
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+            {% if request.user.is_authenticated %}
+                <p>Hello {{request.user}}</p>
+            {% endif %}
+
+                <!-- Diese Karte zeigt die Kategorien -->
+                <div class="card my-2">
+                        <div class="card-header">Kategorien</div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{% url 'smallads:all' %}">Alle Kategorien</a>
+                            </li>
+                            {% if category_list %}
+                                {% for category in category_list %}
+                                    <li class=" list-group-item">
+                                        <a href="{% url 'smallads:all' %}?category={{category.name}}">
+                                        {{category.name}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <p>Noch keine Kategorien angelegt.</p>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'smallads:smallad_create' %}" class="btn btn-dark btn-block btn-sm m-1">Neue Kleinanzeige</a>
+                                <a href="{% url 'logout' %}?next={% url 'smallads:all' %}" class="btn btn-dark btn-block btn-sm m-1">Logout</a>
+                            {% else %}
+                                <a href="{% url 'login' %}?next={% url 'smallads:all' %}" class="btn btn-dark btn-block btn-sm m-1">Login</a>
+                            {% endif %}
+
+                        </ul>
+
+                        {% if request.user.is_authenticated %}
+                            <hr>
+                            <p>{{ user }}, du magst {{ fav_count }} Kleinanzeigen: </p>
+                            <ol>
+                                {% for fav in favorites %}
+                                    <li>{{ fav }}</li>
+                                {% empty %}
+                                    <p>{{ user }} hat noch keine Favoriten.</p>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+
+                </div>
+            </div>
+
+            <!-- Diese col zeigen die Kleinanzeigen -->
+            <div class="col-md-9">
+                <div class="row">
+                {% for smallad in smallad_list %}
+                    <div class="col-md-4">
+                        <div class="card my-2">
+                            <img class="image-thumbnail" src="{{smallad.image.url}}" alt="Card image cap">
+
+                            <div class="card-body">
+                                <small>Category: {{smallad.category.name}}</small></br>
+                                <a href="{% url 'smallads:smallad_detail'  smallad.id %}">{{ smallad.title|truncatechars:20 }}</a></br>
+                                <small>Preis: {{smallad.price}} Euro</small></br>
+                                <small>=> {{smallad.description|truncatechars:20}}...</small></br>
+
+                                <!-- Achtung: total ist ein Pseudofeld (.annotate), was nicht im Model zu finden ist -->
+                                <small>{{smallad.total}} User lieben diesen Artikel.</small></br>
+
+                                <!--hier die kleinen Sterne einbauen -->
+                                <!--1. Schritt: für alle visitor als Summe anschauen-->
+                                <!-- for fav in ... oder if fav in favorites ....-->
+                                {% for i in fav_counter %}
+                                <span class="fa-stack" style="vertical-align: middle;">
+                                    <i class="fa fa-star fa-stack-1x" style="color: orange;"></i>
+                                    <i class="fa fa-star-o fa-stack-1x"></i>
+                                </span>
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'smallads:smallad_detail' smallad.id %}" class="btn btn-outline-dark btn-sm m-1">View...</a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <h3>Keine Kleinanzeigen in der Datenbank...</h3>
+                {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <!--
+        <div class="row">
+            <ul>
+            {% for fav in smalladfav_list %}
+            <li>{{ fav }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        -->
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+
+/* This is a partial blocks.css, you need to add more rules
+   to this file to complete the assignment.  Do not add any CSS
+   styling to the original index.htm / start.htm */
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Here is one of many  CSS rules you will need... # steht für ID-Attribut*/
+#one {
+    max-height: 10em;
+    width: 25%;
+    margin: 5px;
+    padding: 5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: orange;
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    overflow: scroll;
+}
+
+#two {
+    max-height: 10em;
+    width: 25%;
+    margin: 5px;
+    padding: 5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: yellow;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    overflow: scroll;
+}
+
+#three {
+    max-height: 10em;
+    width: 25%;
+    margin: 5px;
+    padding: 5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: green;
+    overflow: scroll;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    float: right;
+}
+
+#four {
+    max-height: 10em;
+    width: 25%;
+    margin: 5px;
+    padding: 5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: blue;
+    overflow: scroll;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    float: right;
+}
+
+#link {
+    /*display: flex;
+    flex-grow: 1;
+    flex-basis: 10%;
+    align-items: center;
+    justify-content: center;*/
+    text-align: center;
+    margin-left: 40%;
+    margin-right: 40%;
+    padding: 5px;
+    top: 5px;
+    background-color: blue;
+    font-weight: bold;
+
+}
+
+a.MeineKlasse:link {
+    color: white;
+}
+
+a.MeineKlasse:visited {color: yellow;}
+a.MeineKlasse:active {color: yellow;}
+a.MeineKlasse:hover {color: #aaa;}

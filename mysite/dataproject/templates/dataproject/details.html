@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <title>Dataproject - Keydata Details</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div>
+        <p>You are looking at the entry {{ entry }}</p></br>   <!-- Variable (Objekt, Instanz von Keydata.objects.get(pk=keydata_id)) aus view-->
+        <hr>
+        {% if entry %}
+            <ul>
+                <li>Name: {{ entry.name}}</li>
+                <li>Ticker: {{ entry.ticker}}</li>
+                <li>Preis: {{ entry.price}}</li>
+                <li>URL: <a href="{{ entry.url }}" target="_blank">{{ entry.url }}</a></li>
+                <li>Beta: {{ entry.beta}}</li>
+                <li>Revenue/Employee: {{ entry.revperemployee}}</li>
+                <li>P/E-Ratio: {{ entry.peratio}}</li>
+                <li>Dividend: {{ entry.dividend}}</li>
+                <li>EPS: {{ entry.eps}}</li>
+                <li>Yield: {{ entry.divyield}}</li>
+                <li>Ex-Div-Date: {{ entry.exdivdate}}</li>
+                <li>Shortrate: {{ entry.shortrate}}</li>
+                <li>Lower 52: {{ entry.lower_52}}</li>
+                <li>Upper 52: {{ entry.upper_52}}</li>
+                <li>Lower Day: {{ entry.lower_day}}</li>
+                <li>Upper Day: {{ entry.upper_day}}</li>
+                <li>Note: {{ entry.note}}</li>
+                <li>{{ entry.dt_string}}</li>
+            </ul>
+        {% else %}
+            <p>Keine Liste vorhanden.</p>
+        {% endif %}
+    </div>
+
+</body>
+{% endblock %}

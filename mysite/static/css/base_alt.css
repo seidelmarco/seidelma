@@ -1,0 +1,108 @@
+body, h1, h2, h3, h4, h5 {
+  font-family: 'Raleway', sans-serif;
+}
+
+
+body {
+  background-color: white;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+nav {
+    margin-bottom: 15px;
+}
+
+/* Style the search field */
+form.ad_list_search_form input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid teal;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+
+form.ad_list_search_form button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid teal;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.ad_list_search_form button:hover {
+  background: #0b7dda;
+}
+
+form.ad_list_search_form::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.navigation {
+  background-color: white;
+  text-align: center;
+  letter-spacing: 3px;
+  padding: 30px;
+}
+
+.herotitle {
+  background-color: white;
+  font-family: "Raleway", "Times", Sans-Serif; /*Fallback-Font Times oder jede verfügbare sans serif*/
+  font-weight: 200;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 20px;
+  letter-spacing: 1px;
+}
+
+.w3-button {
+    /*letter-spacing: 3px;*/
+    margin: 0;
+    padding: 0;
+}
+
+p {
+  font-family: 'Raleway', sans-serif; /*Fallback-Font jede verfügbare sans serif*/
+  text-align: inherit;
+  font-size: 15px;
+}
+
+mark {
+    background-color: LightSeaGreen;
+}
+
+h2 {
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+.contenttable {
+    font-size: 12px;
+}
+
+ol {
+    list-style: circle outside none;
+    /* list-style-type: square;
+     list-style-position: outside;
+     list-style-image: none; same same but  longhand*/
+}
+
+.card {
+  padding: 10px;
+  /*margin: 20px;*/
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}

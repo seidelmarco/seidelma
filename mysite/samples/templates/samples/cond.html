@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guessing game with integers - a conditional template</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <p>Impossible POST guessing game</p>
+    <p>Your guess was {{ guess }}</p>
+    {% if guess < 42 %}
+        <p>Too low!</p>
+    {% elif guess > 42 %}
+        <p>Too high!</p>
+    {% else %}
+        <p>Just right :-)</p>
+    {% endif %}
+</body>
+</html>

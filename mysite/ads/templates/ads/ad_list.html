@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block head %}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    form.ad_list_search_form input[type=text] {
+      padding: 10px;
+      font-size: 17px;
+      border: 1px solid teal;
+      float: left;
+      width: 80%;
+      background: #f1f1f1;
+    }
+
+    form.ad_list_search_form button {
+      float: left;
+      width: 20%;
+      padding: 10px;
+      background: #2196F3;
+      color: white;
+      font-size: 17px;
+      border: 1px solid teal;
+      border-left: none;
+      cursor: pointer;
+    }
+
+    form.ad_list_search_form button:hover {
+      background: #0b7dda;
+    }
+
+    form.ad_list_search_form::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Classifieds</h1>
+<!--
+    <div style="float:right">
+    <!-- https://www.w3schools.com/howto/howto_css_search_button.asp-->
+<!--    <form class="ad_list_search_form">
+        <input type="text" placeholder="Search.." name="search" pattern=".{3,}"  required title="3 characters minimum"
+        {% if search %} value="{{ search }}" {% endif %}>
+        <button type="submit"><i class="fa fa-search"></i></button>
+        <a href="{% url 'ads:all' %}"><i class="fa fa-undo"></i></a>
+    </form>
+    </div>
+-->
+    <p>
+    {% if ad_list %}
+    <ul>
+      {% for ad in ad_list %}
+        <li>
+            <a href="{% url 'ads:ad_detail'  ad.id %}">{{ ad.title }}</a>
+            {% if ad.owner == user %}
+            (<a href="{% url 'ads:ad_update' ad.id %}">Ändern</a> |
+            <a href="{% url 'ads:ad_delete' ad.id %}">Löschen</a>)
+            {% endif %}
+            {% if user.is_authenticated %}
+            <!-- Two hrefs with two stacked icons each - one showing and one hidden -->
+                <a href="#" onclick=
+                    "favPost('{% url 'ads:ad_unfavorite' ad.id %}', {{ ad.id }} ); return false;"
+                    {% if ad.id not in favorites %} style="display: none;" {% endif %}
+                    id="favorite_star_{{ ad.id }}">
+                <span class="fa-stack" style="vertical-align: middle;">
+                <i class="fa fa-star fa-stack-1x" style="color: orange;"></i>
+                <i class="fa fa-star-o fa-stack-1x"></i>
+                </span>
+                </a>
+                <!-- the second href -->
+                <!-- Weird - fa-stack changes vertical spacing so to be consistent we use it here -->
+                <a href="#" onclick=
+                    "favPost('{% url 'ads:ad_favorite'  ad.id %}', {{ ad.id }} ); return false;"
+                    {% if ad.id in favorites %} style="display: none;" {% endif %}
+                    id="unfavorite_star_{{ ad.id }}">
+                <span class="fa-stack" style="vertical-align: middle;">
+                <i class="fa fa-star fa-stack-1x" style="display: none; color: orange;"></i>
+                <i class="fa fa-star-o fa-stack-1x"></i>
+                </span>
+                </a>
+            {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>There are no classifieds in the database.</p>
+    {% endif %}
+    </p>
+    <p>
+    <a href="{% url 'ads:ad_create' %}">Create Ad</a> |
+    {% if user.is_authenticated %}
+    <a href="{% url 'logout' %}?next={% url 'ads:all' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'login' %}?next={% url 'ads:all' %}">Login</a>
+    {% endif %}
+    </p>
+
+    <!--script hier ist ein bug drin: siehe console, es lässt sich nicht anklicken (Edit: ich habe in den console.log parms + statt Komma eingefügt>
+        function favPost(url, ad_id) {
+            fetch(url, {
+                method: "POST", // *GET, POST, DELETE, PUT, etc.
+                mode: "cors", // no-cors, cors, *same-origin
+                cache: "no-cache", // default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, *same-origin, omit
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded",
+                },
+                redirect: "follow", // manual, *follow, error
+                referrer: "no-referrer", // no-referrer, *client
+            }).then(function(data) {
+                console.log(url + 'finished');
+                $("#unfavorite_star_"+ad_id).toggle();
+                $("#favorite_star_"+ad_id).toggle();
+            }.catch(function() {
+                console.log(url + 'error');
+            });
+        }
+    </script-->
+
+    <script>
+    function favPost(url, ad_id) {
+        console.log('Requesting JSON');
+        $.post(url, {},  function(rowz){
+            console.log(url, 'finished');
+            $("#unfavorite_star_"+ad_id).toggle();
+            $("#favorite_star_"+ad_id).toggle();
+        }).fail(function(xhr) {
+            alert('Url failed with '+xhr.status+' '+url);
+        });
+    }
+    </script>
+
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+/*body, h1, h2, h3, h4, h5 {
+  font-family: "Raleway", sans-serif;
+}
+
+
+body {
+  background-color: white;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+}
+
+.navigation {
+  background-color: white;
+  text-align: center;
+  letter-spacing: 3px;
+  padding: 30px;
+  font-weight: 500;
+}
+
+.herotitle {
+  background-color: white;
+  font-family: "Raleway", "Times", Sans-Serif; /*Fallback-Font Times oder jede verfügbare sans serif*/
+/*  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 20px;
+  letter-spacing: 1px;
+}
+
+.w3-button {
+    /*letter-spacing: 3px;*/
+/*    margin: 0;
+    padding: 0;
+}
+
+p {
+  font-family: 'Raleway', sans-serif; /*Fallback-Font jede verfügbare sans serif*/
+/*  text-align: inherit;
+  font-size: 18px;
+}
+
+mark {
+    background-color: LightSeaGreen;
+}
+
+h2 {
+    text-transform: uppercase;
+}
+
+.contenttable {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+ol {
+    list-style: circle outside none;
+    /* list-style-type: square;
+     list-style-position: outside;
+     list-style-image: none; same same but  longhand*/
+}
+/*
+.card {
+  padding: 10px;
+  margin: 20px;
+}
+*/

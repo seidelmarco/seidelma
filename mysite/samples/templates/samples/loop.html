@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template loops - mehrere Listen in einen Context und dann durchiterieren</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div>
+        <p>Template loops - mehrere Listen in einen Context und dann durchiterieren</p></br>
+        <p>Schreibe in deinen view mehrere Listen - die Variable der Liste kommt dann als value zum Key-Oberbegriff in den Kontext</p></br>
+        <p>Your guess was {{ zap }}</p></br>
+        <ul>
+            {% for x in fruits %}
+            <li>{{ x }}</li>
+            {% endfor %}
+            {% if nuts %}
+                <p>Number of nuts: {{ nuts | length }}</p>
+            {% else %}
+                <p>No nuts.</p>
+            {% endif %}
+        </ul>
+
+    </div>
+
+</body>
+</html>

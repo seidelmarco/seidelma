@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}{{app_name}} Smallads, Artists, Businesses, Data {% endblock %}
+
+
+{% block content %}
+
+<header><h1 class="herotitle">How to invest in the New 20s</h1></h1></header>
+
+<div class="w3-row">
+     <div class="w3-col m4 l2">
+    <br />
+    <div class="w3-container w3-margin-right w3-light-white"> <!--12 columns on mobile, 3 bei 800x600, and 2 on a large screen.   -->
+    <br />
+    <div class="contenttable">
+    <ul>
+        <li>Ongoing Python Projects: Data scraping BeautifulSoup, Link Spider Mining Sites, Twitter, Kaggle Findata </li>
+        <li>ML and AI - Decision Trees</li>
+        <li>Webspider/SE for allangray.co.za/latest-insights/ and fin24</li>
+        <li><a href="{% url 'artist:test_artist_list' %}">Synkyndineo</a></li>
+            <ol>
+                <li>List of Artists</li>
+                <li>List of Businesses</li>
+                <li>Form for submission</li>
+              </ol>
+    </ul>
+    </div>
+    <hr>
+    <!-- Polls Division - hier auswählen und eingeben - redirect auf die Polls-Seiten/Views-->
+    </div>
+    <p>Change my view - vote the poll for the latest trending question: </p>
+        <form action="" method="post"> <!--{% url 'home' %}-->
+        {% csrf_token %}
+        {{ form|crispy }}
+            <fieldset>
+                <legend><h5>{{ vote_one_question.question_text }}</h5></legend>
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                {% for choice in vote_one_question.choice_set.all %}
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label></br>
+                {% endfor %}
+            </fieldset><hr>
+            <input type="submit" value="Vote">
+            <input type="submit" onclick="window.location='{% url 'home' %}'; return false;" value="Cancel">
+        </form>
+        <hr>
+
+        <div>
+        <p>Show results: </p>
+
+        <ul>
+        {% for choice in vote_one_question.choice_set.all %}
+            <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize}}</li>
+        {% endfor %}
+        </ul>
+
+        </div>
+        <hr>
+
+        <p><a href="{% url 'polls:index' %}">Show previous polls... </a></p>
+        <hr>
+    </div>
+
+    <div class="w3-col m4 l5"><br />
+     <div class="w3-container w3-margin-right w3-white"> <!--12 columns on mobile, 3 bei 800x600, and 2 on a large screen.   -->
+
+    {% for post in posts %} <!--posts steht im context-dict -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
+                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.published_date}} </p>
+                    <p class="card-text">{{post.text|slice:":400" }}<a href="{% url 'post_detail' pk=post.pk %}">...click headline or here for more ...</a></p>
+                    <hr>
+                    <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+                </div>
+            </div>
+    {% endfor %}
+    <br />
+    </div>
+     </div>
+
+     <div class="w3-col m4 l5">
+    <br />
+    <div class="w3-container w3-margin-right w3-white"> <!--12 columns on mobile, 3 bei 800x600, and 2 on a large screen.   -->
+
+
+    <h3>Our Top Picks - selected by Yield</h3><br />
+        <caption>Top 500 - Selection</caption>
+
+			<div class="table-responsive"> <!-- diese div gibt der Tabelle auf sehr kleinen Bildschirmen einen Rahmen und macht scrollbar; default ist knietschen bis es nicht mehr geht -->
+		{% if latest_keydata_list %}
+			<table class="table table-hover">
+
+			<thead>
+				   <tr>
+                        <th>Name</th>
+                        <th>Ticker</th>
+                        <th>Währung</th>
+                        <th>Kurs</th>
+                        <th>Änderung</th>
+                        <th>Delta %</th>
+                        <th>KGV</th>
+                        <th>Dividend</th>
+                        <th>EPS</th>
+                        <th>Div.rendite</th>
+                        <th>Ex-Div. Datum</th>
+                        <th>Shortquote</th>
+                        <th>52W-Tief</th>
+                        <th>52W-Hoch</th>
+                        <th>Url</th>
+                        <th>Bemerkung</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  {% for row in latest_keydata_list %}
+                    <tr>
+                        <td>{{ row.name}}</td>
+                        <td>{{ row.ticker}}</td>
+                        <td>{{ row.currency_symbol}}</td>
+                        <td>{{ row.price}}</td>
+                        <td>{{ row.change}}</td>
+                        <td>{{ row.changepercent}}</td>
+                        <td>{{ row.peratio}}</td>
+                        <td>{{ row.dividend}}</td>
+                        <td>{{ row.eps}}</td>
+                        <td>{{ row.divyield}}</td>
+                        <td>{{ row.exdivdate}}</td>
+                        <td>{{ row.shortrate}}</td>
+                        <td>{{ row.lower_52}}</td>
+                        <td>{{ row.upper_52}}</td>
+                        <td><a href="{{ row.url}}" target="_blank">{{ row.url}}</a></td>
+                        <td>{{ row.note}}</td>
+                    </tr>
+                    {% endfor %}
+				</tbody>
+			</table>
+			</div>
+        {% else %}
+            <p>Keine Liste vorhanden.</p>
+        {% endif %}<hr>
+        <p><mark>Market comment:</mark> South Africa should come back onto investor's radar. We carefully watch the progress in Nigeria, Uganda and how the Victoria Falls Securities Exchange will develop.</p>
+    	</div>
+    </div>
+    </div>
+</div>
+
+
+{% endblock %}

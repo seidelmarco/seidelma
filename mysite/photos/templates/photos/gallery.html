@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Gallery of categories{% endblock %}
+
+
+{% block head %}
+<style>
+        .image-thumbnail {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .list-group-item a {
+            text-decoration: none;
+            color: black;
+        }
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="m-5">
+
+    <div class="container">
+        <h1 class="herotitle">Classifieds sorted by user</h1>
+        <div class="row">
+            <div class="col-md-3">
+                {% if request.user.is_authenticated %}
+                <p>Hello {{request.user}}</p>
+                {% endif %}
+                <div class="card">
+                    <div class="card-header">
+                        Categories
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="{% url 'photos:gallery' %}">All</a>
+                        </li>
+                        {% for category in categories %}
+                        <li class=" list-group-item">
+                            <a href="{% url 'photos:gallery' %}?category={{category.name}}">
+                                {{category.name}}
+                            </a>
+                        </li>
+                        {% endfor %}
+
+
+                        <a href="{% url 'photos:add' %}" class="btn btn-dark btn-block btn-sm m-1">Add Photo</a>
+                        <a href="{% url 'logout' %}" class="btn btn-dark btn-block btn-sm m-1">Logout</a>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                {% for photo in photos %}
+                    <div class="col-md-4">
+                        <div class="card my-2">
+                            <img class="image-thumbnail" src="{{photo.image.url}}" alt="Card image cap">
+
+                            <div class="card-body">
+                                <small>Category: {{photo.category.name}}</small></br>
+                                <small>=> {{photo.description|truncatechars:27}}...</small></br>
+                                <!--hier die kleinen Sterne einbauen -->
+                                {% if user.is_authenticated %}
+
+                                    <!-- Two hrefs with two stacked icons each - one showing and one hidden -->
+                                    <a href="#" onclick=
+                                        "favPhoto('{% url 'photos:photo_unfavorite' photo.id %}', {{ photo.id }} ); return false;"
+                                        {% if photo.id not in favorites %} style="display: none;" {% endif %}
+                                        id="favorite_star_{{ photo.id }}">
+                                    <span class="fa-stack" style="vertical-align: middle;">
+                                    <i class="fa fa-star fa-stack-1x" style="color: orange;"></i>
+                                    <i class="fa fa-star-o fa-stack-1x"></i>
+                                    </span>
+                                    </a>
+                                    <!-- the second href -->
+                                    <!-- Weird - fa-stack changes vertical spacing so to be consistent we use it here -->
+                                    <a href="#" onclick=
+                                        "favPhoto('{% url 'photos:photo_favorite'  photo.id %}', {{ photo.id }} ); return false;"
+                                        {% if photo.id in favorites %} style="display: none;" {% endif %}
+                                        id="unfavorite_star_{{ photo.id }}">
+                                    <span class="fa-stack" style="vertical-align: middle;">
+                                    <i class="fa fa-star fa-stack-1x" style="display: none; color: orange;"></i>
+                                    <i class="fa fa-star-o fa-stack-1x"></i>
+                                    </span>
+                                    </a>
+
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'photos:photo' photo.id %}" class="btn btn-outline-dark btn-sm m-1">View...</a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <h3>No photos in database...</h3>
+                {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function favPhoto(url, photo_id) {
+        console.log('Requesting JSON');
+        $.post(url, {},  function(rowz){
+            console.log(url, 'finished');
+            $("#unfavorite_star_"+photo_id).toggle();
+            $("#favorite_star_"+photo_id).toggle();
+        }).fail(function(xhr) {
+            alert('Url failed with '+xhr.status+' '+url);
+        });
+    }
+</script>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

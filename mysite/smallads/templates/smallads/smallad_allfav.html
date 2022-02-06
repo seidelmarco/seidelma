@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+{% if smalladfav %}
+    {% for fav in smalladfav %}
+        <p>{{ fav.user }} -- {{ fav.id }} -- {{ fav.smallad }}</p>
+    {% empty %}
+        <p>Keine Favoriten</p>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

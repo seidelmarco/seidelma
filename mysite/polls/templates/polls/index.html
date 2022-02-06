@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Polls{% endblock %}
+{% block content %}
+
+<head>
+    <title>Polls Index</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<header><h1 class="herotitle">Polls - find and vote the latest polls</h1></h1></header>
+
+<div class="container-fluid">
+<div class="row">
+
+<div class="col-lg-2"></div>
+
+<div class="col-lg-8">
+<div class="card mb-4">
+<div class="card-body">
+
+    {% if latest_question_list %}
+        <ul>
+           {% for row in latest_question_list %}
+            <li><a href="{% url 'polls:detail' row.id %}">{{ row.question_text}}</a></li>
+           {% endfor %}
+        </ul>
+    {% else %}
+        <p>No polls are available.</p>
+    {% endif %}
+
+</div>
+</div>
+</div>
+
+<div class="col-lg-2"></div>
+
+</div>
+</div>
+</body>
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Upvote/Downvote Articles - sorted by relevance</h1>
+
+<div class="vote-buttons">
+    {% for article in articles %}
+        <ol>
+            <li><a href="#">{{ article.title}}</a>{{ article.title}} -- {{ article.link}} -- <button>+1</button><button>-1</button></li>
+        </ol>
+
+    {% empty%}
+        <p>Keine Artikel zum Voten.</p>
+    {% endfor%}
+
+</div>
+
+
+<script>
+    $(document).ready(function()    {
+        alert('Did this execute?');
+
+        $('div.vote-buttons img.vote-up').click(function()  {
+
+            var id = {{ article.id }};
+            var vote_type = 'up';
+
+            if ($(this).hasClass('selected'))   {
+                var vote_action = 'recall-vote'
+                $.post('ajax/thread/vote', {id:id, type:vote_type, action:vote_action}, function(response){
+                    if (isInt(response)) {
+                        $('img.vote-up').removeAttr('src')
+                            .attr('src', 'images/vote-up-off.png')
+                            .removeClass('selected');
+                        $('div.vote-tally span.num').html(response);
+                    }
+                });
+
+            } else {
+
+                var vote_action = 'vote'
+                $.post('/ajax/thread/vote', {id:id, type:vote_type, action:vote_action}, function(response) {
+                    if (isInt(response)) {
+                        $('img.vote-up').removeAttr('src')
+                        .attr('src', 'images/vote-up-on.png')
+                        .addClass('selected');
+                    $('div.vote-tally span.num').html(response);
+                    }
+                });
+            }
+    });
+</script>
+
+
+<!-- brauchen wir erst mal nicht, nur zur Ablage -->
+<script>
+function favPost(url, thing_id) {
+    console.log('Requesting JSON');
+    $.post(url, {},  function(rowz){
+        console.log(url, 'finished');
+        $("#unfavorite_star_"+thing_id).toggle();
+        $("#favorite_star_"+thing_id).toggle();
+    }).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+    });
+}
+</script>
+{% endblock %}

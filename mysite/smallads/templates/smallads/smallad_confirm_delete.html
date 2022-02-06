@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Kleinanzeigen - {{ smallad.title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+
+<h1 class="herotitle">{{ smallad.title }} löschen</h1>
+
+<p>Are you sure you want to delete the smallad {{ smallad }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" value="Yes, delete.">
+  <input type="submit" value="Cancel" onclick="window.location.href='{% url 'smallads:all' %}';return false;">
+</form>
+
+
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,181 @@
+{% load static %}
+{% load app_tags %} <!-- see /home/templatetags/app_tags.py and dj4e-samples/settings.py-->
+<!-- In die app_tags.py kann ich all die APIs wie Gravatar als Funktion reinschreiben -->
+<!-- die es dann über die Filter-Pipe (vertikal line) hier in die Templates reinzieht -->
+<!DOCTYPE html>
+<html lang="de-ch">
+<head>
+    <meta charset="UTF-8">
+    <title>New 20s - {% block title %}{% endblock %}</title>
+
+    <!-- Replace this value (42-42) with the one provided by the autograder -->
+    <meta name="dj4e" content="8b910e56415eb6bd1037b46e6e619c58">
+
+    <meta name="dj4e-code" content="42162867476202">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS neuester Scheiß ;-) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS aus Django-Central-Tutorial; evtl. auskommentieren -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+
+    <link rel="stylesheet"
+        href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
+         crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+        crossorigin="anonymous"></script>
+
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+      crossorigin="anonymous"></script>
+
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!--hier Verlinkung zu w3schools css-Templates einfügen-->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <!--hier Verlinkung zu Google Fonts einfügen-->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base_alt.css' %}">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+
+    <style>
+        .overlay{
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 10;
+          display: none;
+          background-color: rgba(0,0,0,0.5); /*dim the background into light grey*/
+        }
+    </style>
+
+{% block head %}
+<!-- Content Goes here -->
+{% endblock %}
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url 'home' %}">Neue 20er</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'smallads:all' %}">Ads</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'polls:index' %}">Polls</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'dataproject:index' %}">Data-Project</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'artist:test_artist_list' %}">Synkyndineo</a>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'post_new' %}">{% include '/home/seidelma/django_projects/mysite/blog/templates/blog/icons/file-earmark-plus.svg' %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'post_draft_list' %}"><span class="glyphicon glyphicon-edit">Drafts</span></a>
+              </li>
+              <li class="nav-item">
+                <!-- gravatar depends on app_tags being loaded -->
+                <!-- https://brobin.me/blog/2016/07/super-simple-django-gravatar/ -->
+                <!-- app_tags steckt in home-App (warum auch immer die Datei dort gefunden wird??? -->
+                <a class="nav-link" href="{% url 'logout' %}">Hello {{ user.username }}<small> (Log out)</small>
+                <img style="width: 25px;" src="{{ user|gravatar:60 }}"/><b class="caret"></b></a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}"><span class="glyphicon glyphicon-lock">Login</span></a>
+              </li>
+              {% endif %}
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'artist:add' %}">Create Artist</a>
+                <a href="{% url 'artist:test_artist_create' %}">Create Testartist</a>
+            </li>
+            {% endif %}
+        </ul>
+
+  </div>
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" pattern=".{3,}"  required title="3 characters minimum"
+    {% if search %} value="{{ search }}" {% endif %}>
+    <!-- wenn ich es richtig verstanden habe, müsste der value search jetzt
+    eigentlich in den entsprechenden views stehen-->
+    <button style="margin-right: 7px;" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <a href="{% url 'home' %}"><i class="fa fa-undo"></i></a>
+  </form>
+</nav>
+{% endblock %}
+
+{% block welcome %} {% endblock %}
+
+{% block messages %}
+    {% if messages %}
+    {% for msg in messages %}
+        <div class="alert alert-{{msg.level_tag}}" role="alert">
+        {{msg.message}}
+        </div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}
+
+
+
+{% block content %}
+<!-- Content Goes here -->
+{% endblock %}
+
+{% block footer %}
+<!-- Footer - der klebt leider noch am Inhalt und muss wirklich unten am screen window hängen-->
+<footer class="navbar fixed-bottom navbar-light bg-light">
+        <p class="m-0 text-dark text-center " style="font-size: 12px;">Copyright &copy; Marco Seidel
+        hier noch die Toppicks als laufenden Ticker reinziehen - Megaprojekt :-)</p>
+        <!--<a href="https://developer.mozilla.org/de/docs/Web/HTML/Element" target="_blank">HTML-Reference</a>
+        <a href="//wiki.selfhtml.org" target="_blank">selfhtml</a-->
+        <a href="https://docs.python.org/" target="_blank">Read the Docs! :-)</a>
+</footer>
+{% endblock %}
+
+</body>
+</html>

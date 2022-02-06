@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <p>Please login to see this site.</p>
+  {% endif %}
+{% endif %}
+
+{% load crispy_forms_tags %}
+
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+{{ form|crispy }}
+<input type="submit" class="btn btn-primary" value="Login Locally" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+<p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
+<hr>
+
+{% if settings.SOCIAL_AUTH_GITHUB_KEY %}
+{% endif %}
+<hr/>
+<a class="btn btn-info" role="button" href="{% url 'social:begin' 'github' %}?next={{ next }}">
+    <i class="fa fa-github" aria-hidden="true"></i>
+    Login with GitHub</a>
+
+
+<!-- ROOT_URLCONF {{ settings.ROOT_URLCONF }} -->
+
+{% endblock %}
+
+
+
+<!--
+Not able to display github icon
+
+Rosalba Zarate - 10 months ago
+
+I was not able to display the github icon with this code:
+
+~/django_projects/mysite/home/templates/registration/login_social.html
+
+ 27 {% if settings.SOCIAL_AUTH_GITHUB_KEY %}
+ 28 <hr/>
+ 29 <a class="btn btn-info" role="button" href="{% url 'social:begin' 'github' %}?next={{ next }}">
+ 30     <i class="fa fa-github" aria-hidden="true"></i>
+ 31     Login with GitHub</a>
+ 32 {% endif %}
+
+I solved it by moving the endif to line 28 and then everything else. Please share if the original code worked for you or you have same issue than me.-->

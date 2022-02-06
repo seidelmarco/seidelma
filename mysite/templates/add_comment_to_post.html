@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h3 class="card-title">New comment</h3>
+        <form method="POST" class="post-form">
+           {% csrf_token %}
+           {{ form.as_p }}
+           <button type="submit" class="btn-link">Save</button>
+           <button type="submit" class="btn-link" onclick="window.location='{% url 'home' %}'; return false;">Cancel</button>
+        </form>
+    </div>
+</div
+
+{% endblock %}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dump data into form/db for entries of stocks</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+   <p>Dump of {{ title }}:
+        <p>
+        {{ dump|safe }}
+        </p>
+    </p>
+<a href="{% url 'dataproject:index' %}">Back</a>
+</body>
+</html>
+

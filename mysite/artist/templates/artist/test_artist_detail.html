@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+
+{% block title %}Our artists - {{ artist.name }}{% endblock %}
+
+{% block head %}
+<style>
+
+
+.w3-row img {margin-bottom: -8px}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-content" style="max-width:1500px">
+
+  <!-- Header -->
+  <header class="w3-container w3-xlarge w3-padding-24">
+    <h1 class="herotitle">{{ artist.name }}</h1>
+    <a href="{% url 'artist:test_artist_list' %}" class="w3-left w3-button w3-white">ALL ARTISTS</a>
+    <a href="#about" class="w3-right w3-button w3-white">About</a>
+    <div class="w3-row">
+    <p><small>
+    ({{ artist.updated_at|naturaltime }})
+    {% if artist.artist_owner == user %}
+    <a href="{% url 'artist:test_artist_update' artist.id %}"><i class="fa fa-pencil"></i></a>
+    <a href="{% url 'artist:test_artist_confirm_delete' artist.id %}"><i class="fa fa-trash"></i></a>
+    {% endif %}
+    </small></p>
+    </div>
+  </header>
+
+  <!-- Photo Grid -->
+  <div class="w3-row">
+    <div class="w3-half">
+      <img src="{{ artist.profpic.url }}" style="width:100%">
+      <img src="{{ artist.artist_image_2.url }}" style="width:100%">
+    </div>
+
+    <div class="w3-half">
+      <img src="{{ artist.artist_image.url }}" style="width:100%">
+      <img src="{{ artist.artist_image_3.url }}" style="width:100%">
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer / About Section -->
+<div class="w3-light-grey w3-padding-64 w3-center" id="about">
+  <h2>About</h2>
+  <img src="{{ artist.profpic.url }}" class="w3-image w3-padding-32" width="300" height="300">
+  <form style="margin:auto;width:60%" method="POST" action="">
+    <p>{{ artist.bio }} I have a heart of love and an interest of lorem ipsum and mauris neque quam blog. I want to share my world with you. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+    <p class="w3-large w3-text-pink">Do not hesitate to contact me!</p>
+    <div class="w3-section">
+      <label><b>Name</b></label>
+      <input class="w3-input w3-border" type="text" required name="Name">
+    </div>
+    <div class="w3-section">
+      <label><b>Email</b></label>
+      <input class="w3-input w3-border" type="text" required name="Email">
+    </div>
+    <div class="w3-section">
+      <label><b>Message</b></label>
+      <input class="w3-input w3-border" required name="Message">
+    </div>
+    <button type="submit" class="btn btn-primary">Send message...</button>
+  </form>
+  <br>
+  <!-- tags hier einbauen -->
+  <div>
+    {% if artist.tags.all %}
+        {% for tag in artist.tags.all %}
+        <!--Minimalvariante - eigentlich sollten die klickbar sein und irgendwas machen - aber was???? ;-)
+        zu erst einmal in die Suche einbauen-->
+        <button type="button" class="btn btn-info"style="background-color: Teal;">{{ tag }}</button>
+        {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

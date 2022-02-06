@@ -1,0 +1,96 @@
+Sitemap:
+Mysite:
+
+/home/seidelma/django_projects/mysite/mysite/urls.py
+Path('', TemplateView.as_view(template_name='home/main.html')),
+
+Apps:
+Home/
+app_name = 'home'
+urlpatterns = [
+    # ex: /home/
+    path('', TemplateView.as_view(template_name='main.html')),
+
+]
+Hello/
+app_name = 'hello'
+urlpatterns = [
+    # ex: /hello/
+    path('', views.cookie, name='cookie'),
+
+]
+
+Authz/
+app_name = 'authz'
+urlpatterns = [
+    path('', TemplateView.as_view(template_name='authz/main.html')),
+    path('open', views.OpenView.as_view(), name='open'),
+    path('apereo', views.ApereoView.as_view(), name='apereo'),
+    path('manual', views.ManualView.as_view(), name='manual'),
+    path('protect', views.ProtectView.as_view(), name='protect'),
+    path('python', views.DumpPython.as_view(), name='python'),
+
+]
+Blog/
+app_name = 'blog'
+urlpatterns = [
+    # ex: /blog/
+    path('', views.index, name='index'),
+    # ex: /blog/5/
+    #path('<int:question_id>/', views.detail, name='detail'),
+]
+Dataproject/
+app_name = 'dataproject'
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('keydata/', views.keydata_details, name='keydata_details'),
+    # ex: /keydata/entry/5/
+    path('keydata/entry/<int:keydata_id>/', views.keydata_single_entry, name='keydata_single_entry'), #<int:keydata_id>/
+    # ex: /dataproject/5/
+    path('<int:keydata_id>/', views.keydata_single_entry, name='keydata_single_entry'),
+    path('keydata/guess/', views.wertepaar_keyvalue, name='wertepaar_keyvalue'),
+    path('example', views.example),
+    path('create', views.SimpleCreate.as_view()),
+    path('update', views.SimpleUpdate.as_view()),
+    path('validate', views.Validate.as_view()),
+    path('success', views.success, name='success'),
+]
+
+
+Site/
+
+Polls/
+app_name = 'polls'
+urlpatterns = [
+    # ex: /polls/
+    path('', views.IndexView.as_view(), name='index'),
+    # ex: /polls/5/
+    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+    # ex: /polls/5/results
+    path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
+    # ex: /polls/5/vote
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+    path('owner', views.owner, name='owner'),
+]
+Samples/
+app_name = 'samples'
+urlpatterns = [
+    # ex: /samples/
+    #path('game/<slug:guess>', views.GameView.as_view()),
+    path('game', views.getform, name='getform'),
+    path('loop', views.loop1, name='loop'),
+    path('loop/<slug:zap>', views.loop, name='loop'),
+]
+Synkyndineo/
+app_name = 'synkyndineo'
+
+# Note use of plural for list view and singular for detail view
+
+urlpatterns = [
+    path('', TemplateView.as_view(template_name='synkyndineo/main.html')),
+    path('artists', views.ArtistListView.as_view(), name='artists'),
+    path('artist/<int:pk_from_url>', views.ArtistDetailView.as_view(), name='artist'),
+    path('businesses', views.BusinessListView.as_view(), name='businesses'),
+    path('business/<int:pk>', views.BusinessDetailView.as_view(), name='business'),
+    path('form', views.business_form, name='business_form'),
+]
